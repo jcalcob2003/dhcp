@@ -1,0 +1,98 @@
+
+--------CODIGO VAGRANT----------------
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "debian/bookworm64"
+
+    config.vm.provider "virtualbox" do |vb|
+        vb.memory = 256
+        # vb.linked_clone = true
+    end
+
+    # Provisión inicial para actualizar paquetes
+    config.vm.provision "shell", inline: "sudo apt-get update -y"
+
+    config.vm.define "web" do |web|
+        web.vm.network "forwarded_port", guest: 80, host: 8080
+        web.vm.network "private_network", ip: "192.168.57.10"
+
+        # Provisión para instalar Apache
+        web.vm.provision "shell", inline: <<-SHELL
+            sudo apt-get update -y
+            sudo apt-get install -y apache2
+        SHELL
+    end # web
+
+    config.vm.define "bd" do |bd|
+        bd.vm.box = "ubuntu/trusty64"
+        bd.vm.network "private_network", ip: "192.168.57.11"
+    end # bd
+end
+
+------------------COMANDOS CONSOLA---------------------
+
+asir@DESKTOP-VSQ813G MINGW64 ~/Desktop/SRI
+$ ssh-keygen
+
+
+Generating public/private rsa key pair.
+Enter file in which to save the key (/c/Users/asir/.ssh/id_rsa): 
+Created directory '/c/Users/asir/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again: 
+Your identification has been saved in /c/Users/asir/.ssh/id_rsa
+Your public key has been saved in /c/Users/asir/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:H4ToHea+ByTwewaHz9B69Ye+RV6QXWJ8E8lAn183VHg asir@DESKTOP-VSQ813G
+The key's randomart image is:
++---[RSA 3072]----+
+|            .+=+*|
+|    .  . .   .=BE|
+|     o.o+ .   o*=|
+|     .*++o.    .=|
+|      .@S... .. o|
+|      o.B. .oo.. |
+|       +.... .o  |
+|         .. ..   |
+|        ..  ..   |
++----[SHA256]-----+
+
+
+asir@DESKTOP-VSQ813G MINGW64 ~/Desktop/SRI
+$ git clone git@github.com:jcalcob2003/clave.git
+
+
+Cloning into 'clave'...
+The authenticity of host 'github.com (140.82.121.3)' can't be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? y
+Please type 'yes', 'no' or the fingerprint: y
+Please type 'yes', 'no' or the fingerprint: y
+Please type 'yes', 'no' or the fingerprint: 
+Host key verification failed.
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+
+asir@DESKTOP-VSQ813G MINGW64 ~/Desktop/SRI
+$ git init
+
+Initialized empty Git repository in C:/Users/asir/Desktop/SRI/.git/
+
+asir@DESKTOP-VSQ813G MINGW64 ~/Desktop/SRI (master)
+$ git config --global user.name "jcalcob2003"
+
+asir@DESKTOP-VSQ813G MINGW64 ~/Desktop/SRI (master)
+$ git config --global user.emal "jcalcob2003@ieszaidinvergeles.org"
+
+asir@DESKTOP-VSQ813G MINGW64 ~/Desktop/SRI (master)
+$ git config --global user.email "jcalcob2003@ieszaidinvergeles.org"
+
+asir@DESKTOP-VSQ813G MINGW64 ~/Desktop/SRI (master)
+$ git remote add origin git@github.com:jcalcob2003/clave.git
+
+asir@DESKTOP-VSQ813G MINGW64 ~/Desktop/SRI (master)
+$ git push -u origin main
+
